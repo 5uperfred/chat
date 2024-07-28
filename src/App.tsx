@@ -77,6 +77,25 @@ export default function App() {
     try {
       // Disable the mic until the bot has joined
       voiceClient.enableMic(false);
+
+      // Make the request to the serverless function for authentication
+      const response = await fetch('/api/authenticate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          // Add necessary authentication details if required
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log(data); // You can use this data if needed
+
       await voiceClient.start();
     } catch (e) {
       if (e instanceof RateLimitError) {
